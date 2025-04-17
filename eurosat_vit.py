@@ -103,7 +103,6 @@ def main():
 
     results = trainer.evaluate(eval_dataset=test_hf)
     print("Test Results:")
-    print(f"Loss: {results['eval_loss']:.4f}")
     print(f"Accuracy: {results['eval_accuracy'] * 100:.2f}%")
 
 if __name__ == "__main__":
