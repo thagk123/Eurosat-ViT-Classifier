@@ -21,7 +21,6 @@ This project fine-tunes a Vision Transformer (ViT) model to classify satellite i
 ## Results
 - Train/test split: 85% / 15%
 - Test Accuracy: 98.79%
-- Test Loss: 0.0539
 
 ## Files
 - `eurosat_vit.py`: Full training and testing file
