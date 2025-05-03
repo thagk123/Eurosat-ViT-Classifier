@@ -4,21 +4,21 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import Subset
 from sklearn.model_selection import train_test_split
-from transformers import ViTFeatureExtractor, ViTForImageClassification, Trainer, TrainingArguments
-import evaluate
+from transformers import ViTImageProcessor, ViTForImageClassification, Trainer, TrainingArguments
+from sklearn.metrics import accuracy_score
 import numpy as np
 
-def get_feature_extractor():
-    """Load the pretrained ViT feature extractor."""
-    return ViTFeatureExtractor.from_pretrained("google/vit-base-patch16-224-in21k")
+def get_image_processor():
+    """Load the pretrained ViT image processor."""
+    return ViTImageProcessor.from_pretrained("google/vit-base-patch16-224-in21k")
 
-def get_transform(extractor):
+def get_transform(processor):
     """Return image transform pipeline compatible with ViT."""
     return transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x[:3, :, :]),
-        transforms.Normalize(mean=extractor.image_mean, std=extractor.image_std)
+        transforms.Normalize(mean=processor.image_mean, std=processor.image_std)
     ])
 
 def load_and_split_dataset(transform):
@@ -71,17 +71,17 @@ def get_training_args():
 
 def get_compute_metrics():
     """Return evaluation metric function (accuracy)."""
-    accuracy = evaluate.load("accuracy")
     def compute_metrics(eval_pred):
         logits, labels = eval_pred
-        preds = np.argmax(logits, axis=-1)
-        return accuracy.compute(predictions=preds, references=labels)
+        preds = np.argmax(logits, axis=1)
+        acc = accuracy_score(labels, preds)
+        return {"accuracy": acc}
     return compute_metrics
 
 def main():
     """Main execution function: training and evaluation."""
-    extractor = get_feature_extractor()
-    transform = get_transform(extractor)
+    processor = get_image_processor()
+    transform = get_transform(processor)
     train_ds, test_ds, label_names = load_and_split_dataset(transform)
 
     train_hf = EuroSATDataset(train_ds)
