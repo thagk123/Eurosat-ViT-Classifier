@@ -49,8 +49,8 @@ class EuroSATDataset(torch.utils.data.Dataset):
 
 def get_model(num_labels, label_names):
     """Load the pretrained ViT model and adapt it for classification."""
-    id2label = {i: label for i, label in enumerate(label_names)}
-    label2id = {label: i for i, label in enumerate(label_names)}
+    id2label = dict(enumerate(label_names))
+    label2id = {label: idx for idx, label in enumerate(label_names)}
     return ViTForImageClassification.from_pretrained(
         "google/vit-base-patch16-224-in21k",
         num_labels=num_labels,
