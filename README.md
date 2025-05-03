@@ -16,7 +16,6 @@ This project fine-tunes a Vision Transformer (ViT) model to classify satellite i
 - Hugging Face Transformers
 - Torchvision
 - scikit-learn
-- evaluate
 
 ## Results
 - Train/test split: 85% / 15%
