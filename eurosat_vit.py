@@ -1,12 +1,13 @@
 """Fine-tuning a Vision Transformer on the EuroSAT satellite image dataset."""
 
+import numpy as np
 import torch
-from torchvision import datasets, transforms
 from torch.utils.data import Subset
+from torchvision import datasets, transforms
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from transformers import ViTImageProcessor, ViTForImageClassification, Trainer, TrainingArguments
-from sklearn.metrics import accuracy_score
-import numpy as np
+
 
 def get_image_processor():
     """Load the pretrained ViT image processor."""
